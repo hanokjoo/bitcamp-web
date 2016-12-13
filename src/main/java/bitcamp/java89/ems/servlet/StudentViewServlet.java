@@ -4,9 +4,10 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import bitcamp.java89.ems.dao.impl.StudentMysqlDao;
 import bitcamp.java89.ems.vo.Student;
@@ -17,9 +18,11 @@ import bitcamp.java89.ems.vo.Student;
 // 간접적으로 Servlet 인터페이스를 구현하는 방식을 취한다.
 // 이 클래스를 상속받게 되면 오직 service() 메서드만 만들면 되기 때문에 코드가 편리하다.
 @WebServlet("/student/view")
-public class StudentViewServlet extends AbstractServlet{
+public class StudentViewServlet extends HttpServlet {
+  private static final long serialVersionUID = 1L;
+  
   @Override
-  public void service(ServletRequest request, ServletResponse response) throws ServletException, IOException {
+  protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     try {
       StudentMysqlDao studentDao = StudentMysqlDao.getInstance();
       response.setContentType("text/plain;charset=UTF-8");
