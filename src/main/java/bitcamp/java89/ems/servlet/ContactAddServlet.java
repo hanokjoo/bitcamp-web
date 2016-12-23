@@ -21,12 +21,18 @@ import bitcamp.java89.ems.vo.Contact;
 public class ContactAddServlet extends HttpServlet {
   private static final long serialVersionUID = 1L;
 
+
   @Override
   protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    Contact contact = new Contact();
+    contact.setName(request.getParameter("name"));
+    contact.setPosition(request.getParameter("position"));
+    contact.setTel(request.getParameter("tel"));
+    contact.setEmail(request.getParameter("email"));
     
-    response.setHeader("Refresh", "1;url=list");
     request.setCharacterEncoding("UTF-8");
-    // 웹브라우저 쪽으로 출력할 수 있도록 출력 스트림 객체를 얻는다.
+
+    response.setHeader("Refresh", "1;url=list");
     response.setContentType("text/html;charset=UTF-8");
     PrintWriter out = response.getWriter();
 
@@ -42,15 +48,10 @@ public class ContactAddServlet extends HttpServlet {
     try {
       ContactMysqlDao contactDao = ContactMysqlDao.getInstance();
       
-      if (contactDao.existEmail(request.getParameter("email"))) {
+      if (contactDao.existEmail(contact.getEmail())) {
         throw new Exception("같은 이메일이 존재합니다. 등록을 취소합니다.");
       }
       
-      Contact contact = new Contact();
-      contact.setName(request.getParameter("name"));
-      contact.setPosition(request.getParameter("position"));
-      contact.setTel(request.getParameter("tel"));
-      contact.setEmail(request.getParameter("email"));
       
       contactDao.insert(contact);
       out.println("<p>등록하였습니다.</p>");
